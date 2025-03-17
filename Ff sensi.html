@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Free Fire Max Sensitivity Finder</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #222;
+            color: white;
+            text-align: center;
+            margin: 20px;
+        }
+        .container {
+            max-width: 400px;
+            margin: auto;
+            padding: 20px;
+            background-color: #333;
+            border-radius: 10px;
+        }
+        select, input, button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            border: none;
+            font-size: 16px;
+        }
+        button {
+            background-color: #ff5722;
+            color: white;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #e64a19;
+        }
+        #manualInput {
+            display: none;
+        }
+        #result {
+            margin-top: 20px;
+            font-size: 16px;
+            font-weight: bold;
+            background-color: #444;
+            padding: 10px;
+            border-radius: 5px;
+        }
+    </style>
+</head>
+<body>
+
+    <button onclick="toggleManualInput()">🔢 Calculator</button>
+
+    <div class="container">
+        <h2>Free Fire Max Sensitivity Finder</h2>
+
+        <div id="defaultSelection">
+            <label>Select MediaTek Processor:</label>
+            <select id="processor">
+                <option value="">-- Select Processor --</option>
+                <optgroup label="Dimensity Series">
+                    <option value="9000">Dimensity 9000</option>
+                    <option value="9000+">Dimensity 9000+</option>
+                    <option value="8100">Dimensity 8100</option>
+                    <option value="8200 Ultimate">Dimensity 8200 Ultimate</option>
+                    <option value="7300">Dimensity 7300</option>
+                    <option value="6300">Dimensity 6300</option>
+                </optgroup>
+                <optgroup label="Helio G Series">
+                    <option value="G99">Helio G99</option>
+                    <option value="G96">Helio G96</option>
+                    <option value="G85">Helio G85</option>
+                    <option value="G80">Helio G80</option>
+                    <option value="G35">Helio G35</option>
+                </optgroup>
+            </select>
+        </div>
+
+        <div id="manualInput">
+            <label>Enter Processor Name:</label>
+            <input type="text" id="manualProcessor" placeholder="Enter your processor name">
+        </div>
+
+        <label>Select RAM:</label>
+        <select id="ram">
+            <option value="4">4GB</option>
+            <option value="6">6GB</option>
+            <option value="8">8GB</option>
+            <option value="12">12GB</option>
+        </select>
+
+        <label>Select FPS:</label>
+        <select id="fps">
+            <option value="30">30 FPS</option>
+            <option value="60">60 FPS</option>
+            <option value="90">90 FPS</option>
+            <option value="120">120 FPS</option>
+            <option value="144">144 FPS</option>
+        </select>
+
+        <label>Select Processor NM:</label>
+        <select id="nm">
+            <option value="4">4nm</option>
+            <option value="6">6nm</option>
+            <option value="7">7nm</option>
+            <option value="12">12nm</option>
+        </select>
+
+        <button onclick="calculateSensitivity()">Get Sensitivity</button>
+
+        <div id="result"></div>
+    </div>
+
+    <script>
+        function toggleManualInput() {
+            let manualInput = document.getElementById("manualInput");
+            let defaultSelection = document.getElementById("defaultSelection");
+
+            if (manualInput.style.display === "none") {
+                manualInput.style.display = "block";
+                defaultSelection.style.display = "none";
+            } else {
+                manualInput.style.display = "none";
+                defaultSelection.style.display = "block";
+            }
+        }
+
+        function calculateSensitivity() {
+            let processor = document.getElementById("processor").value;
+            let manualProcessor = document.getElementById("manualProcessor").value;
+            let ram = parseInt(document.getElementById("ram").value);
+            let fps = parseInt(document.getElementById("fps").value);
+            let nm = parseInt(document.getElementById("nm").value);
+
+            // If no processor is selected, use manual input
+            if (!processor) {
+                processor = manualProcessor;
+            }
+
+            // Base sensitivity calculation
+            let baseSensitivity = 80 + (ram * 2) + (fps / 2) - (nm / 3);
+
+            // Different sensitivity settings
+            let general = baseSensitivity + 10;
+            let redDot = baseSensitivity + 5;
+            let scope2x = baseSensitivity;
+            let scope4x = baseSensitivity - 5;
+            let sniper = baseSensitivity - 10;
+            let freeLook = baseSensitivity + 15;
+
+            // Ensure values are between 0-200
+            general = Math.max(0, Math.min(200, general));
+            redDot = Math.max(0, Math.min(200, redDot));
+            scope2x = Math.max(0, Math.min(200, scope2x));
+            scope4x = Math.max(0, Math.min(200, scope4x));
+            sniper = Math.max(0, Math.min(200, sniper));
+            freeLook = Math.max(0, Math.min(200, freeLook));
+
+            // Display results
+            document.getElementById("result").innerHTML = `
+                <strong>Processor:</strong> ${processor || "Manual Input"}<br>
+                <strong>Recommended Sensitivity:</strong><br>
+                🟢 General: ${general}<br>
+                🔴 Red Dot: ${redDot}<br>
+                🔵 2x Scope: ${scope2x}<br>
+                🟣 4x Scope: ${scope4x}<br>
+                🎯 Sniper Scope: ${sniper}<br>
+                🏃 Free Look: ${freeLook}
+            `;
+        }
+    </script>
+
+</body>
+</html>
